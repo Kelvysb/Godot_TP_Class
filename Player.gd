@@ -1,21 +1,21 @@
 extends CharacterBody3D
 
-@export var SPEED = 5.0
-@export var JUMP_VELOCITY = 4.5
-@export var MOUSE_SENSITIVITY = 0.05
-@export var TURN_SPEED = 10
+
+const SPEED = 5.0
+const JUMP_VELOCITY = 4.5
+const MOUSE_SENSITIVITY = 0.05
+const TURN_SPEED = 10
+
+@onready var pivot = $Pivot
+@onready var geometry = $Geometry
 
 # Get the gravity from the project settings to be synced with RigidBody nodes.
 var gravity = ProjectSettings.get_setting("physics/3d/default_gravity")
 
-@onready var pivot = $CameraMount
-@onready var camera = $CameraMount/Camera3D
-@onready var geometry = $Geometry
-
 func _input(event):
 	if event is InputEventMouseButton:
 		Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
-	elif Input.is_action_pressed("ui_cancel"):
+	elif Input.is_action_just_pressed("ui_cancel"):
 		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 		
 	if event is InputEventMouseMotion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
@@ -23,7 +23,8 @@ func _input(event):
 		geometry.rotate_y(deg_to_rad((event as InputEventMouseMotion).relative.x * MOUSE_SENSITIVITY))
 		pivot.rotate_x(deg_to_rad(-(event as InputEventMouseMotion).relative.y * MOUSE_SENSITIVITY))
 		pivot.rotation.x = deg_to_rad(clamp(rad_to_deg(pivot.rotation.x), -90, 90))
-
+		
+		
 func _physics_process(delta):
 	# Add the gravity.
 	if not is_on_floor():
@@ -39,9 +40,9 @@ func _physics_process(delta):
 	var direction = (transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 	if direction:
 		velocity.x = direction.x * SPEED
-		velocity.z = direction.z * SPEED	
+		velocity.z = direction.z * SPEED
 		var prev_y = geometry.rotation.y
-		geometry.look_at(position + direction)
+		geometry.look_at(Vector3(position.x, position.y + 1, position.z) + direction)
 		var target_y = geometry.rotation.y
 		geometry.rotation.y = lerp_angle(prev_y, target_y, delta * TURN_SPEED)
 	else:

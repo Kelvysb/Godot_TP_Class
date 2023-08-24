@@ -1,32 +1,31 @@
-[gd_scene load_steps=5 format=3 uid="uid://gw7irq1rt67m"]
+[gd_scene load_steps=5 format=3 uid="uid://dlpm3qyxte4r4"]
 
-[ext_resource type="Script" path="res://Player.gd" id="1_ll24j"]
+[ext_resource type="Script" path="res://Player.gd" id="1_1f0gx"]
 
-[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_cld3f"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dcria"]
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_yfmuq"]
+[sub_resource type="CylinderMesh" id="CylinderMesh_xe1ps"]
 
-[sub_resource type="CylinderMesh" id="CylinderMesh_7iii8"]
+[sub_resource type="CapsuleShape3D" id="CapsuleShape3D_klqd2"]
 
 [node name="Player" type="CharacterBody3D"]
-script = ExtResource("1_ll24j")
+script = ExtResource("1_1f0gx")
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00667, 0)
-shape = SubResource("CapsuleShape3D_cld3f")
-
-[node name="Geometry" type="Node3D" parent="."]
+[node name="Geometry" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+mesh = SubResource("CapsuleMesh_dcria")
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="Geometry"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.00437, 0)
-mesh = SubResource("CapsuleMesh_yfmuq")
+transform = Transform3D(0.581448, 0, 0, 0, -2.01629e-08, 0.346529, 0, -0.461274, -1.51473e-08, -0.000645518, 0.523103, -0.198708)
+mesh = SubResource("CylinderMesh_xe1ps")
 
-[node name="MeshInstance3D2" type="MeshInstance3D" parent="Geometry"]
-transform = Transform3D(0.00923256, 0.0183845, 0.685328, -0.414822, 0.000409178, 0.0152531, -9.31323e-10, -0.38145, 0.0330468, 0.00517825, 1.49673, -0.253992)
-mesh = SubResource("CylinderMesh_7iii8")
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 0)
+shape = SubResource("CapsuleShape3D_klqd2")
 
-[node name="CameraMount" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.50009, 0)
+[node name="Pivot" type="SpringArm3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.928913, 0.370298, 0, -0.370298, 0.928913, 0.488961, 1.48651, 0)
+spring_length = 4.0
 
-[node name="Camera3D" type="Camera3D" parent="CameraMount"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.863739, 3.75674)
+[node name="Camera3D" type="Camera3D" parent="Pivot"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 3.85004)
